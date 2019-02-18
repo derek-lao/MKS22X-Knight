@@ -132,4 +132,6 @@ public class KnightBoard{
     countHelper(1,startingRow,startingCol);
     return count;
   }
+
+  public String toString(){}
 }
