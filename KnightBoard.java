@@ -31,24 +31,29 @@ public class KnightBoard{
   }
 
   private boolean solveHelper(int label,int row,int col){
-    if(label >= squares && !outOfBounds(row,col))
-    {
-      return true;
-    }
+    if(outOfBounds(row,col)) return false;
     else
     {
-      if(!outOfBounds(row,col) && addable(row,col))
+      if(label >= squares)
       {
-        board[row][col] = label;
-        return
-        solveHelper(label+1,row+2,col+1) ||
-        solveHelper(label+1,row+2,col-1) ||
-        solveHelper(label+1,row+1,col+2) ||
-        solveHelper(label+1,row+1,col-2) ||
-        solveHelper(label+1,row-2,col+1) ||
-        solveHelper(label+1,row-2,col-1) ||
-        solveHelper(label+1,row-1,col+2) ||
-        solveHelper(label+1,row-1,col-1);
+        return true;
+      }
+      else
+      {
+        if(addable(row,col))
+        {
+          board[row][col] = label;
+          return
+          solveHelper(label+1,row+2,col+1) ||
+          solveHelper(label+1,row+2,col-1) ||
+          solveHelper(label+1,row+1,col+2) ||
+          solveHelper(label+1,row+1,col-2) ||
+          solveHelper(label+1,row-2,col+1) ||
+          solveHelper(label+1,row-2,col-1) ||
+          solveHelper(label+1,row-1,col+2) ||
+          solveHelper(label+1,row-1,col-1);
+        }
+        return false;
       }
     }
   }
@@ -60,8 +65,11 @@ public class KnightBoard{
   @return true when the board is solvable from the specified starting position
   */
   public boolean solve(int startingRow,int startingCol){
-
+    return solveHelper(1,startingRow,startingCol);
   }
+
+
+
 
   /**
   @throws IllegalStateException when the board contains non-zero values.
