@@ -121,17 +121,33 @@ public class KnightBoard{
   */
   public int countSolutions(int startingRow, int startingCol){
     if(illegalBoard())
-    {
-      throw new IllegalStateException();
-    }
+    throw new IllegalStateException();
+
     if(outOfBounds(startingRow,startingCol))
     {
       throw new IllegalArgumentException();
     }
-    count=0;
+
+    count = 0;
     countHelper(1,startingRow,startingCol);
     return count;
   }
 
-  public String toString(){}
+  public String toString(){
+    String answer = "";
+    for(int r=0; r<rows; r++)
+    {
+      for(int c=0; c<cols; c++)
+      {
+        int current = board[r][c];
+        if(current < 10)
+        answer += " " + current + " ";
+        
+        else
+        answer += current + " ";
+      }
+      answer += "\n";
+    }
+    return answer;
+  }
 }
