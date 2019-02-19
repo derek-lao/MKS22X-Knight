@@ -50,18 +50,18 @@ public class KnightBoard{
     if(outOfBounds(row,col)) return false;
     else
     {
-      // System.out.println("The label is: " + label);
-      // System.out.println("The number of squares is: " + squares);
-      System.out.println(this.toString());
-      System.out.println("The label is " + label);
+      // System.out.println("The label is " + label);
       if(label >= squares)
       {
         if(addable(row,col))
         {
-          System.out.println("Successfully added knight at " + row + "," + col);
+          board[row][col] = label;
+          // System.out.println("Successfully added knight at " + row + "," + col);
+          // System.out.println(this.toString());
           return true;
         }
-        System.out.println("Failed to add knight at " + row + "," + col);
+        // System.out.println("Failed to add knight at " + row + "," + col);
+        // System.out.println(this.toString());
         return false;
       }
       else
@@ -69,43 +69,28 @@ public class KnightBoard{
         if(addable(row,col))
         {
           board[row][col] = label;
-          System.out.println("Successfully added knight at " + row + "," + col);
+          // System.out.println("Successfully added knight at " + row + "," + col);
+          // System.out.println(this.toString());
           for(int a = -2; a < 3; a++)
           {
             for(int b = -2; b < 3; b++)
             {
-              if(Math.abs(a) != Math.abs(b))
+              if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
               {
                 if(solveHelper(label+1,row+a,col+b))
-                return true;
-
-                else
                 {
-                  board[row][col] = 0;
-                  System.out.println("Failed to add knight at " + row + "," + col);
-                  return false;
+                  return true;
                 }
               }
             }
           }
-          // if
-          // (solveHelper(label+1,row+2,col+1) ||
-          // solveHelper(label+1,row+2,col-1) ||
-          // solveHelper(label+1,row+1,col+2) ||
-          // solveHelper(label+1,row+1,col-2) ||
-          // solveHelper(label+1,row-2,col+1) ||
-          // solveHelper(label+1,row-2,col-1) ||
-          // solveHelper(label+1,row-1,col+2) ||
-          // solveHelper(label+1,row-1,col-2))
-          // return true;
-          // else
-          // {
-          //   board[row][col] = 0;
-          //   System.out.println("Failed to add knight at " + row + "," + col);
-          //   return false;
-          // }
+          board[row][col] = 0;
+          // System.out.println("Backtracking one step");
+          // System.out.println(this.toString());
+          return false;
         }
-        System.out.println("Failed to add knight because already occupied at " + row + "," + col);
+        // System.out.println("Failed to add knight because already occupied at " + row + "," + col);
+        // System.out.println(this.toString());
         return false;
       }
     }
@@ -133,30 +118,42 @@ public class KnightBoard{
   private void countHelper(int label,int row,int col){
     if(!outOfBounds(row,col))
     {
+      // System.out.println("The label is " + label);
       if(label >= squares)
       {
         if(addable(row,col))
         {
+          board[row][col] = label;
+          // System.out.println("Successfully added knight at " + row + "," + col);
+          // System.out.println(this.toString());
           count++;
+          // System.out.println("The count is " + count);
+          board[row][col] = 0;
         }
-        System.out.println("Failed to add knight at " + row + "," + col);
       }
       else
       {
         if(addable(row,col))
         {
           board[row][col] = label;
-          System.out.println("Successfully added knight at " + row + "," + col);
-          countHelper(label+1,row+2,col+1);
-          countHelper(label+1,row+2,col-1);
-          countHelper(label+1,row+1,col+2);
-          countHelper(label+1,row+1,col-2);
-          countHelper(label+1,row-2,col+1);
-          countHelper(label+1,row-2,col-1);
-          countHelper(label+1,row-1,col+2);
-          countHelper(label+1,row-1,col-2);
+          // System.out.println("Successfully added knight at " + row + "," + col);
+          // System.out.println(this.toString());
+          for(int a = -2; a < 3; a++)
+          {
+            for(int b = -2; b < 3; b++)
+            {
+              if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
+              {
+                countHelper(label+1,row+a,col+b);
+              }
+            }
+          }
+          board[row][col] = 0;
+          // System.out.println("Backtracking one step");
+          // System.out.println(this.toString());
         }
-        System.out.println("Failed to add knight because already occupied at " + row + "," + col);
+        // System.out.println("Failed to add knight because already occupied at " + row + "," + col);
+        // System.out.println(this.toString());
       }
     }
   }
