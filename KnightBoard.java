@@ -70,25 +70,43 @@ public class KnightBoard{
         {
           board[row][col] = label;
           System.out.println("Successfully added knight at " + row + "," + col);
-          return
-          solveHelper(label+1,row+2,col+1) ||
-          solveHelper(label+1,row+2,col-1) ||
-          solveHelper(label+1,row+1,col+2) ||
-          solveHelper(label+1,row+1,col-2) ||
-          solveHelper(label+1,row-2,col+1) ||
-          solveHelper(label+1,row-2,col-1) ||
-          solveHelper(label+1,row-1,col+2) ||
-          solveHelper(label+1,row-1,col-2);
+          for(int a = -2; a < 3; a++)
+          {
+            for(int b = -2; b < 3; b++)
+            {
+              if(Math.abs(a) != Math.abs(b))
+              {
+                if(solveHelper(label+1,row+a,col+b))
+                return true;
+
+                else
+                {
+                  board[row][col] = 0;
+                  System.out.println("Failed to add knight at " + row + "," + col);
+                  return false;
+                }
+              }
+            }
+          }
+          // if
+          // (solveHelper(label+1,row+2,col+1) ||
+          // solveHelper(label+1,row+2,col-1) ||
+          // solveHelper(label+1,row+1,col+2) ||
+          // solveHelper(label+1,row+1,col-2) ||
+          // solveHelper(label+1,row-2,col+1) ||
+          // solveHelper(label+1,row-2,col-1) ||
+          // solveHelper(label+1,row-1,col+2) ||
+          // solveHelper(label+1,row-1,col-2))
+          // return true;
+          // else
+          // {
+          //   board[row][col] = 0;
+          //   System.out.println("Failed to add knight at " + row + "," + col);
+          //   return false;
+          // }
         }
-        else
-        {
-          System.out.println("Failed to add knight at " + row + "," + col);
-          board[row][col] = 0;
-          return false;
-        }
-        // System.out.println("Failed to add knight at " + row + "," + col);
-        // board[row][col] = 0;
-        // return false;
+        System.out.println("Failed to add knight because already occupied at " + row + "," + col);
+        return false;
       }
     }
   }
@@ -128,6 +146,7 @@ public class KnightBoard{
         if(addable(row,col))
         {
           board[row][col] = label;
+          System.out.println("Successfully added knight at " + row + "," + col);
           countHelper(label+1,row+2,col+1);
           countHelper(label+1,row+2,col-1);
           countHelper(label+1,row+1,col+2);
@@ -135,15 +154,9 @@ public class KnightBoard{
           countHelper(label+1,row-2,col+1);
           countHelper(label+1,row-2,col-1);
           countHelper(label+1,row-1,col+2);
-          countHelper(label+1,row-1,col-1);
+          countHelper(label+1,row-1,col-2);
         }
-        else
-        {
-          System.out.println("Failed to add knight at " + row + "," + col);
-          board[row][col] = 0;
-        }
-        // System.out.println("Failed to add knight at " + row + "," + col);
-        // board[row][col] = 0;
+        System.out.println("Failed to add knight because already occupied at " + row + "," + col);
       }
     }
   }
