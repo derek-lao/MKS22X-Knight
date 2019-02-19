@@ -137,6 +137,13 @@ public class KnightBoard{
           countHelper(label+1,row-1,col+2);
           countHelper(label+1,row-1,col-1);
         }
+        else
+        {
+          System.out.println("Failed to add knight at " + row + "," + col);
+          board[row][col] = 0;
+        }
+        // System.out.println("Failed to add knight at " + row + "," + col);
+        // board[row][col] = 0;
       }
     }
   }
