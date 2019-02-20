@@ -138,16 +138,26 @@ public class KnightBoard{
           board[row][col] = label;
           // System.out.println("Successfully added knight at " + row + "," + col);
           // System.out.println(this.toString());
-          for(int a = -2; a < 3; a++)
-          {
-            for(int b = -2; b < 3; b++)
-            {
-              if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
-              {
-                countHelper(label+1,row+a,col+b);
-              }
-            }
-          }
+          // // loop coding for code efficiency
+          // for(int a = -2; a < 3; a++)
+          // {
+          //   for(int b = -2; b < 3; b++)
+          //   {
+          //     if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
+          //     {
+          //       countHelper(label+1,row+a,col+b);
+          //     }
+          //   }
+          // }
+          // hardcoding for runtime efficiency
+          countHelper(label+1,row+2,col+1);
+          countHelper(label+1,row+2,col-1);
+          countHelper(label+1,row+1,col+2);
+          countHelper(label+1,row+1,col-2);
+          countHelper(label+1,row-2,col+1);
+          countHelper(label+1,row-2,col-1);
+          countHelper(label+1,row-1,col+2);
+          countHelper(label+1,row-1,col-2);
           board[row][col] = 0;
           // System.out.println("Backtracking one step");
           // System.out.println(this.toString());
