@@ -7,23 +7,24 @@ public class KnightBoard{
     */
   // Initialize the board to the correct size and make them all 0's
   public KnightBoard(int rows,int cols){
-    board=new int[rows][cols];
+    board = new int[rows][cols];
+    solveCoordinates = new int[rows][cols];
     this.rows = rows;
     this.cols = cols;
     squares = rows * cols;
-    clear();
+    clearOriginal();
   }
 
   private int count;
   private int[][] solveCoordinates;
-  private int[] first = {1,2,2,1,-1,-2,-2,-1};
-  private int[] second = {2,1,-1,-2,2,1,-1,-2};
+  private int[] first =  {1, 2, 2, 1,-1,-2,-2,-1};
+  private int[] second = {2, 1,-1,-2, 2, 1,-1,-2};
 
-  private boolean addable(int row,int col){
+  private boolean isZero(int row,int col){
     return board[row][col] == 0;
   }
   private boolean removeable(int row,int col){
-    return !addable(row,col);
+    return !isZero(row,col);
   }
   private boolean outOfBounds(int row,int col){
     return(row < 0 || row >= board.length || col < 0 || col >= board[0].length);
@@ -49,12 +50,24 @@ public class KnightBoard{
     return true;
   }
 
-  public void clear(){
+  public void clearOriginal(){
     for(int r=0; r<rows; r++)
     {
       for(int c=0; c<cols; c++)
       {
         board[r][c] = 0;
+        solveCoordinates[r][c] = 0;
+      }
+    }
+  }
+
+  public void clearOptimized(){
+    optimizedFill();
+    for(int r=0; r<rows; r++)
+    {
+      for(int c=0; c<cols; c++)
+      {
+        solveCoordinates[r][c] = 0;
       }
     }
   }
@@ -62,7 +75,7 @@ public class KnightBoard{
   public void optimizedFill(){
     for(int r = 0; r < rows; r++)
     {
-      for(int c = 0; c< cols; c++)
+      for(int c = 0; c < cols; c++)
       {
         for(int a = 0; a < first.length; a++)
         {
@@ -74,7 +87,6 @@ public class KnightBoard{
   }
 
 
-
   // private boolean solveHelper(int label,int row,int col){
   //     if(outOfBounds(row,col)) return false;
   //     else
@@ -82,7 +94,7 @@ public class KnightBoard{
   //       // System.out.println("The label is " + label);
   //       if(label >= squares)
   //       {
-  //         if(addable(row,col))
+  //         if(isZero(row,col))
   //         {
   //           board[row][col] = label;
   //           // System.out.println("Successfully added knight at " + row + "," + col);
@@ -95,7 +107,7 @@ public class KnightBoard{
   //       }
   //       else
   //       {
-  //         if(addable(row,col))
+  //         if(isZero(row,col))
   //         {
   //           board[row][col] = label;
   //           // System.out.println("Successfully added knight at " + row + "," + col);
@@ -157,7 +169,7 @@ public class KnightBoard{
   //           // {
   //           //   int newRow = row + first[a];
   //           //   int newCol = col + second[a];
-  //           //   if(!outOfBounds(newRow,newCol) && addable(newRow,newCol))
+  //           //   if(!outOfBounds(newRow,newCol) && isZero(newRow,newCol))
   //           //   {
   //           //     if(solveHelper(label + 1,newRow,newCol))
   //           //     {
@@ -183,28 +195,71 @@ public class KnightBoard{
     if(outOfBounds(row,col)) return false;
     else
     {
-      if(board[row][col] != 0) board[row][col] --;
-      // System.out.println("The label is " + label);
-      if(label >= squares)
+      System.out.println("The label is " + label);
+      System.out.println("The board is currently");
+      System.out.println(this.toString());
+      if(label > squares)
       {
         if(this.isEmpty())
         {
-          // System.out.println("Successfully added knight at " + row + "," + col);
-          // System.out.println(this.toString());
+          System.out.println("The board is empty!");
+          System.out.println(this.toString());
           return true;
         }
-        // System.out.println("Failed to add knight at " + row + "," + col);
-        // System.out.println(this.toString());
+        System.out.println("The board is not empty!");
+        System.out.println(this.toString());
         return false;
       }
       else
       {
-        if(!addable(row,col))
+
+        if(!isZero(row,col))
         {
+          solveCoordinates[row][col] = label;
           int prev = board[row][col];
           board[row][col] = 0;
-          // System.out.println("Successfully added knight at " + row + "," + col);
-          // System.out.println(this.toString());
+          System.out.println("Successfully added knight at " + row + "," + col);
+          System.out.println(this.toString());
+          // loop to loop through all directions
+          for(int a = -2; a < 3; a++)
+          {
+            for(int b = -2; b < 3; b++)
+            {
+              if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
+              {
+                if(!outOfBounds(row + a,col + b) && board[row + a][col + b] == 1)
+                {
+                  if(solveCoordinates[row + a][col + b] == 0)
+                  {
+                    solveCoordinates[row][col] = 0;
+                    board[row][col] = prev;
+                    System.out.println("No possible moves to lead to " + (row + a) + "," + (col + a) + " and it has not been occupied");
+                    System.out.println("Backtracking one step");
+                    System.out.println(this.toString());
+                    return false;
+                  }
+                }
+              }
+            }
+          }
+
+          for(int a = -2; a < 3; a++)
+          {
+            for(int b = -2; b < 3; b++)
+            {
+              if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
+              {
+                if(!outOfBounds(row + a,col + b) && board[row + a][col + b] != 0)
+                {
+                  board[row + a][col + b]--;
+                }
+              }
+            }
+          }
+
+          System.out.println("Decreased surrounding squares");
+          System.out.println(this.toString());
+
           for(int a = -2; a < 3; a++)
           {
             for(int b = -2; b < 3; b++)
@@ -213,19 +268,19 @@ public class KnightBoard{
               {
                 if(solveHelper(label + 1,row + a,col + b))
                 {
-
                   return true;
                 }
               }
             }
           }
+          solveCoordinates[row][col] = 0;
           board[row][col] = prev;
-          // System.out.println("Backtracking one step");
-          // System.out.println(this.toString());
+          System.out.println("Backtracking one step");
+          System.out.println(this.toString());
           return false;
         }
-        // System.out.println("Failed to add knight because already occupied at " + row + "," + col);
-        // System.out.println(this.toString());
+        System.out.println("Failed to add knight because already occupied at " + row + "," + col);
+        System.out.println(this.toString());
         return false;
       }
     }
@@ -246,10 +301,25 @@ public class KnightBoard{
     {
       throw new IllegalArgumentException();
     }
-    // optimizedFill();
-    // clear();
-    solveCoordinates = new int[rows][cols];
-    return solveHelper(1,startingRow,startingCol);
+    // clearOptimized();
+    // clearOriginal();
+    optimizedFill();
+    if(solveHelper(1,startingRow,startingCol))
+    {
+      for(int r = 0; r < rows; r++)
+      {
+        for(int c = 0;c < cols; c++)
+        {
+          board[r][c] = solveCoordinates[r][c];
+        }
+      }
+      return true;
+    }
+    else
+    {
+      clearOriginal();
+      return false;
+    }
   }
 
   private void countHelper(int label,int row,int col){
@@ -258,7 +328,7 @@ public class KnightBoard{
       // System.out.println("The label is " + label);
       if(label >= squares)
       {
-        if(addable(row,col))
+        if(isZero(row,col))
         {
           board[row][col] = label;
           // System.out.println("Successfully added knight at " + row + "," + col);
@@ -270,7 +340,7 @@ public class KnightBoard{
       }
       else
       {
-        if(addable(row,col))
+        if(isZero(row,col))
         {
           board[row][col] = label;
           // System.out.println("Successfully added knight at " + row + "," + col);

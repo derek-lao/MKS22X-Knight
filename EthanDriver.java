@@ -18,6 +18,7 @@ public class EthanDriver {
 				break;
 			}
 		}
+		
 		// System.out.println("\nCOUNT SOLUTIONS: (from (0, 0))\n");
 		// for (int r = 1; r < 7; r++) {
 		// 	for (int c = r; c < 7; c++) {
