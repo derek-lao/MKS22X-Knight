@@ -19,7 +19,7 @@ public class KnightBoard{
   private int[][] solveCoordinates;
   private int[] first =  {1, 2, 2, 1,-1,-2,-2,-1};
   private int[] second = {2, 1,-1,-2, 2, 1,-1,-2};
-  private int prev;
+  // private int prev;
 
   private boolean isZero(int row,int col){
     return board[row][col] == 0;
@@ -58,6 +58,16 @@ public class KnightBoard{
       {
         board[r][c] = 0;
         solveCoordinates[r][c] = 0;
+      }
+    }
+  }
+
+  public void clearBoard(){
+    for(int r=0; r<rows; r++)
+    {
+      for(int c=0; c<cols; c++)
+      {
+        board[r][c] = 0;
       }
     }
   }
@@ -236,7 +246,7 @@ public class KnightBoard{
         if(!isZero(row,col))
         {
           solveCoordinates[row][col] = label;
-          prev = board[row][col];
+          int prev = board[row][col];
           board[row][col] = 0;
           // System.out.println("Successfully added knight at " + row + "," + col);
           // System.out.println(this.toString());
@@ -254,7 +264,7 @@ public class KnightBoard{
               }
             }
           }
-
+          // this part is so I can uniformly increase all the squares later on.
           // System.out.println("Decreased surrounding squares");
           // System.out.println(this.toString());
 
@@ -280,12 +290,11 @@ public class KnightBoard{
                         {
                           if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
                           {
-                            if(!outOfBounds(row + a,col + b) && board[row + a][col + b] != 0)
+                            if(!outOfBounds(row + a,col + b))
                             {
-                              board[row + a][col + b]++;
-                            }
-                            if(!outOfBounds(row + a,col + b) && board[row + a][col + b] == 0 && solveCoordinates[row + a][col + b] == 0)
-                            {
+                              if(board[row + a][col + b] != 0 ||
+                              (board[row + a][col + b] == 0 && solveCoordinates[row + a][col + b] == 0))
+
                               board[row + a][col + b]++;
                             }
                           }
@@ -448,7 +457,7 @@ public class KnightBoard{
     {
       throw new IllegalArgumentException();
     }
-
+    clearBoard();
     count = 0;
     countHelper(1,startingRow,startingCol);
     return count;
@@ -460,7 +469,7 @@ public class KnightBoard{
     {
       for(int c=0; c<cols; c++)
       {
-        int current = board[r][c];
+        int current = solveCoordinates[r][c];
         if(current == 0)
         answer += " " + "_" + " ";
         else if(current < 10)
