@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class KnightBoard{
   private int[][] board;
   private int rows;
@@ -202,6 +204,130 @@ public class KnightBoard{
   //     }
   //   }
 
+  // private boolean solveHelper(int label,int row,int col){
+  //   if(outOfBounds(row,col)) return false;
+  //   else
+  //   {
+  //     // System.out.println("The label is " + label);
+  //     // System.out.println("The board is currently");
+  //     // System.out.println(this.toString());
+  //     if(label > squares)
+  //     {
+  //       if(this.isEmpty())
+  //       {
+  //         // System.out.println("The board is empty!");
+  //         // System.out.println(this.toString());
+  //         return true;
+  //       }
+  //       // System.out.println("The board is not empty!");
+  //       // System.out.println(this.toString());
+  //       return false;
+  //     }
+  //     if(label == squares)
+  //     {
+  //       if(!outOfBounds(row,col) && board[row][col] == 0 && solveCoordinates[row][col] == 0)
+  //       {
+  //         solveCoordinates[row][col] = label;
+  //         board[row][col] = 0;
+  //         return solveHelper(label + 1,row,col);
+  //       }
+  //       else
+  //       {
+  //         return false;
+  //       }
+  //     }
+  //     else
+  //     {
+  //       if(!isZero(row,col))
+  //       {
+  //         solveCoordinates[row][col] = label;
+  //         int prev = board[row][col];
+  //         board[row][col] = 0;
+  //         // System.out.println("Successfully added knight at " + row + "," + col);
+  //         // System.out.println(this.toString());
+  //
+  //         if(label < squares - 1)
+  //         {
+  //           // loop to check for 1s early
+  //           for(int a = -2; a < 3; a++)
+  //           {
+  //             for(int b = -2; b < 3; b++)
+  //             {
+  //               if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
+  //               {
+  //                 if(!outOfBounds(row + a,col + b) && board[row + a][col + b] == 1)
+  //                 {
+  //                   int nextRow = row + a;
+  //                   int nextCol = col + b;
+  //                   solveCoordinates[row][col] = 0;
+  //                   board[row][col] = prev;
+  //                   // System.out.println("No possible moves to lead to " + nextRow + "," + nextCol + " and it has not been occupied");
+  //                   // System.out.println("Backtracking one step");
+  //                   // System.out.println(this.toString());
+  //                   return false;
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         }
+  //
+  //         for(int a = -2; a < 3; a++)
+  //         {
+  //           for(int b = -2; b < 3; b++)
+  //           {
+  //             if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
+  //             {
+  //               if(!outOfBounds(row + a,col + b) && board[row + a][col + b] != 0)
+  //               {
+  //                 board[row + a][col + b]--;
+  //               }
+  //             }
+  //           }
+  //         }
+  //
+  //
+  //         for(int a = -2; a < 3; a++)
+  //         {
+  //           for(int b = -2; b < 3; b++)
+  //           {
+  //             if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
+  //             {
+  //               if(solveHelper(label + 1,row + a,col + b))
+  //               {
+  //                 return true;
+  //               }
+  //             }
+  //           }
+  //         }
+  //
+  //         solveCoordinates[row][col] = 0;
+  //         board[row][col] = prev;
+  //         for(int a = -2; a < 3; a++)
+  //         {
+  //           for(int b = -2; b < 3; b++)
+  //           {
+  //             if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
+  //             {
+  //               if(!outOfBounds(row + a,col + b) &&
+  //               (board[row + a][col + b] != 0 ||
+  //               (board[row + a][col + b] == 0 && solveCoordinates[row + a][col + b] == 0)))
+  //               {
+  //                 board[row + a][col + b]++;
+  //               }
+  //             }
+  //           }
+  //         }
+  //         // System.out.println("Backtracking one step");
+  //         // System.out.println(this.toString());
+  //         return false;
+  //       }
+  //       // System.out.println("Failed to add knight because already occupied at " + row + "," + col);
+  //       // System.out.println(this.toString());
+  //       return false;
+  //     }
+  //   }
+  // }
+
   private boolean solveHelper(int label,int row,int col){
     if(outOfBounds(row,col)) return false;
     else
@@ -221,22 +347,10 @@ public class KnightBoard{
         // System.out.println(this.toString());
         return false;
       }
-      if(label == squares)
-      {
-        if(!outOfBounds(row,col) && board[row][col] == 0 && solveCoordinates[row][col] == 0)
-        {
-          solveCoordinates[row][col] = label;
-          board[row][col] = 0;
-          return solveHelper(label + 1,row,col);
-        }
-        else
-        {
-          return false;
-        }
-      }
+
       else
       {
-        if(!isZero(row,col))
+        if(board[row][col] != 0)
         {
           solveCoordinates[row][col] = label;
           int prev = board[row][col];
@@ -244,31 +358,9 @@ public class KnightBoard{
           // System.out.println("Successfully added knight at " + row + "," + col);
           // System.out.println(this.toString());
 
-          if(label < squares - 1)
-          {
-            // loop to check for 1s early
-            for(int a = -2; a < 3; a++)
-            {
-              for(int b = -2; b < 3; b++)
-              {
-                if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
-                {
-                  if(!outOfBounds(row + a,col + b) && board[row + a][col + b] == 1)
-                  {
-                    int nextRow = row + a;
-                    int nextCol = col + b;
-                    solveCoordinates[row][col] = 0;
-                    board[row][col] = prev;
-                    // System.out.println("No possible moves to lead to " + nextRow + "," + nextCol + " and it has not been occupied");
-                    // System.out.println("Backtracking one step");
-                    // System.out.println(this.toString());
-                    return false;
-                  }
-                }
-              }
-            }
-          }
+          ArrayList moveCandidates = new ArrayList(prev);
 
+          // this is to decrease all surrounding squares
           for(int a = -2; a < 3; a++)
           {
             for(int b = -2; b < 3; b++)
@@ -278,68 +370,26 @@ public class KnightBoard{
                 if(!outOfBounds(row + a,col + b) && board[row + a][col + b] != 0)
                 {
                   board[row + a][col + b]--;
+                  int[] square = new int[3];
+                  square[0] = board[row + a][col + b];
+                  square[1] = row + a;
+                  square[2] = col + b;
+                  moveCandidates.add(board[row + a][col + b]);
                 }
               }
             }
           }
-          // this part is so I can uniformly increase all the squares later on.
-          // System.out.println("Decreased surrounding squares");
-          // System.out.println(this.toString());
 
-          // if(label < squares - 1)
-          // {
-          //   for(int a = -2; a < 3; a++)
-          //   {
-          //     for(int b = -2; b < 3; b++)
-          //     {
-          //       if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
-          //       {
-          //         if(!outOfBounds(row + a,col + b))
-          //         {
-          //           if(board[row + a][col + b] == 0 && solveCoordinates[row + a][col + b] == 0)
-          //           {
-          //             int nextRow = row + a;
-          //             int nextCol = col + b;
-          //             solveCoordinates[row][col] = 0;
-          //             board[row][col] = prev;
-          //             for(a = -2; a < 3; a++)
-          //             {
-          //               for(b = -2; b < 3; b++)
-          //               {
-          //                 if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
-          //                 {
-          //                   if(!outOfBounds(row + a,col + b))
-          //                   {
-          //                     if(board[row + a][col + b] != 0 ||
-          //                     (board[row + a][col + b] == 0 && solveCoordinates[row + a][col + b] == 0))
-          //
-          //                     board[row + a][col + b]++;
-          //                   }
-          //                 }
-          //               }
-          //             }
-          //
-          //             // System.out.println("No possible moves to lead to " + nextRow + "," + nextCol + " and it has not been occupied");
-          //             // System.out.println("Backtracking one step");
-          //             // System.out.println(this.toString());
-          //             return false;
-          //           }
-          //         }
-          //       }
-          //     }
-          //   }
-          // }
-
-
+          int lowest = 1;
           for(int a = -2; a < 3; a++)
           {
             for(int b = -2; b < 3; b++)
             {
               if(Math.abs(a) != Math.abs(b) && a != 0 && b != 0)
               {
-                if(solveHelper(label + 1,row + a,col + b))
+                if(board[row + a][col + b] != 0))
                 {
-                  return true;
+                  lowest = board[row + a][col + b];
                 }
               }
             }
@@ -372,6 +422,8 @@ public class KnightBoard{
       }
     }
   }
+
+
 
   /** Modifies the board by labeling the moves from 1 (at startingRow,startingCol) up to the area of the board in proper knight move steps.
   @throws IllegalStateException when the board contains non-zero values.
